@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGlobal | Personalized Weight-Loss Meal Planning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .country-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .plate-animation {
+            animation: platePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes platePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .restriction-tag {
+            transition: all 0.2s;
+        }
+        
+        .restriction-tag.active {
+            background-color: #059669;
+            color: white;
+            border-color: #059669;
+        }
+        
+        .meal-card {
+            transition: all 0.3s ease;
+        }
+        
+        .meal-card:hover {
+            transform: translateX(8px);
+        }
+        
+        .portion-visual {
+            background: conic-gradient(
+                #10b981 0deg 180deg,
+                #3b82f6 180deg 270deg,
+                #f59e0b 270deg 360deg
+            );
+            border-radius: 50%;
+        }
+        
+        .tab-active {
+            border-bottom: 2px solid #059669;
+            color: #059669;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-emerald-50 min-h-screen text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-card border-b border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        N
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">NutriGlobal</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#how-it-works" class="text-slate-600 hover:text-emerald-600 font-medium transition">How It Works</a>
+                    <a href="#guidelines" class="text-slate-600 hover:text-emerald-600 font-medium transition">Guidelines</a>
+                    <a href="#safety" class="text-slate-600 hover:text-emerald-600 font-medium transition">Safety</a>
+                </div>
+                <button onclick="scrollToCalculator()" class="bg-emerald-600 text-white px-6 py-2 rounded-full font-medium hover:bg-emerald-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    Start Planning
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+            <div class="absolute top-40 right-10 w-72 h-72 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-emerald-100 text-emerald-800 text-sm font-semibold mb-6 border border-emerald-200">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
+                Evidence-Based Nutrition
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
+                Weight Loss, <span class="gradient-text">Culturally Yours</span>
+            </h1>
+            <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed">
+                Select your country, set your dietary restrictions, and receive a personalized monthly meal plan. 
+                Built on official dietary guidelines with medical-grade safety checks.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="scrollToCalculator()" class="bg-emerald-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-emerald-700 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    Create Your Plan
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+                <button onclick="document.getElementById('guidelines').scrollIntoView({behavior: 'smooth'})" class="bg-white text-slate-700 border-2 border-slate-200 px-8 py-4 rounded-full font-semibold text-lg hover:border-emerald-300 hover:text-emerald-700 transition flex items-center justify-center gap-2">
+                    View Methodology
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Application Interface -->
+    <section id="planner" class="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Progress Steps -->
+            <div class="flex justify-center mb-12">
+                <div class="flex items-center space-x-4">
+                    <div class="flex flex-col items-center">
+                        <div id="step1-indicator" class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg">1</div>
+                        <span class="text-xs mt-2 font-medium text-emerald-600">Country</span>
+                    </div>
+                    <div class="w-16 h-1 bg-slate-200 rounded-full">
+                        <div id="progress-bar-1" class="h-full bg-emerald-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="step2-indicator" class="w-10 h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold transition-all">2</div>
+                        <span class="text-xs mt-2 font-medium text-slate-400">Restrictions</span>
+                    </div>
+                    <div class="w-16 h-1 bg-slate-200 rounded-full">
+                        <div id="progress-bar-2" class="h-full bg-emerald-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="step3-indicator" class="w-10 h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold transition-all">3</div>
+                        <span class="text-xs mt-2 font-medium text-slate-400">Profile</span>
+                    </div>
+                    <div class="w-16 h-1 bg-slate-200 rounded-full">
+                        <div id="progress-bar-3" class="h-full bg-emerald-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="step4-indicator" class="w-10 h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold transition-all">4</div>
+                        <span class="text-xs mt-2 font-medium text-slate-400">Plan</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Country Selection -->
+            <div id="step1" class="fade-in">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-3">Select Your Cuisine</h2>
+                    <p class="text-slate-600">Choose a country to align with local dietary guidelines and food availability</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="country-grid">
+                    <!-- Countries populated by JS -->
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 max-w-2xl mx-auto">
+                    <i data-lucide="info" class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0"></i>
+                    <p class="text-sm text-amber-800">
+                        <strong>Note:</strong> Each country selection adapts portion sizes to local measurement units and prioritizes region-specific ingredients while maintaining evidence-based plate geometry.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2: Dietary Restrictions -->
+            <div id="step2" class="hidden fade-in">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-3">Dietary Restrictions & Preferences</h2>
+                    <p class="text-slate-600">Select all that apply. Medical restrictions trigger safety protocols.</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <!-- Medical Restrictions -->
+                    <div class="bg-red-50 rounded-2xl p-6 border border-red-100">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                            <h3 class="font-bold text-red-900">Medical Restrictions (High Safety Priority)</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3" id="medical-restrictions">
+                            <button onclick="toggleRestriction(this, 'celiac')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-red-200 text-red-800 font-medium hover:bg-red-100">
+                                Celiac Disease (Strict GF)
+                            </button>
+                            <button onclick="toggleRestriction(this, 'allergen')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-red-200 text-red-800 font-medium hover:bg-red-100">
+                                Food Allergies
+                            </button>
+                            <button onclick="toggleRestriction(this, 'diabetes')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-red-200 text-red-800 font-medium hover:bg-red-100">
+                                Diabetes/Prediabetes
+                            </button>
+                            <button onclick="toggleRestriction(this, 'kidney')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-red-200 text-red-800 font-medium hover:bg-red-100">
+                                Kidney Disease
+                            </button>
+                            <button onclick="toggleRestriction(this, 'heart')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-red-200 text-red-800 font-medium hover:bg-red-100">
+                                Heart Failure (Low Sodium)
+                            </button>
+                        </div>
+                        <div id="allergen-selector" class="hidden mt-4 p-4 bg-white rounded-lg border border-red-200">
+                            <p class="text-sm font-semibold text-red-900 mb-2">Select allergens to avoid (Big 9):</p>
+                            <div class="flex flex-wrap gap-2">
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="milk"> Milk
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="eggs"> Eggs
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="fish"> Fish
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="shellfish"> Shellfish
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="tree-nuts"> Tree Nuts
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="peanuts"> Peanuts
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="wheat"> Wheat
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="soy"> Soy
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-sm cursor-pointer hover:bg-slate-200">
+                                    <input type="checkbox" class="allergen-check rounded text-red-600" value="sesame"> Sesame
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle Preferences -->
+                    <div class="bg-emerald-50 rounded-2xl p-6 border border-emerald-100">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="leaf" class="w-5 h-5 text-emerald-600"></i>
+                            <h3 class="font-bold text-emerald-900">Lifestyle Preferences</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="toggleRestriction(this, 'vegetarian')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-emerald-200 text-emerald-800 font-medium hover:bg-emerald-100">
+                                Vegetarian
+                            </button>
+                            <button onclick="toggleRestriction(this, 'vegan')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-emerald-200 text-emerald-800 font-medium hover:bg-emerald-100">
+                                Vegan
+                            </button>
+                            <button onclick="toggleRestriction(this, 'lactose')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-emerald-200 text-emerald-800 font-medium hover:bg-emerald-100">
+                                Lactose Intolerant
+                            </button>
+                            <button onclick="toggleRestriction(this, 'halal')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-emerald-200 text-emerald-800 font-medium hover:bg-emerald-100">
+                                Halal
+                            </button>
+                            <button onclick="toggleRestriction(this, 'kosher')" class="restriction-tag px-4 py-2 rounded-lg border-2 border-emerald-200 text-emerald-800 font-medium hover:bg-emerald-100">
+                                Kosher
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Diet Mode -->
+                    <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="target" class="w-5 h-5 text-blue-600"></i>
+                            <h3 class="font-bold text-blue-900">Weight Loss Approach</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="diet-modes">
+                            <button onclick="selectDietMode(this, 'balanced')" class="diet-mode active ring-2 ring-blue-500 bg-white p-4 rounded-xl border-2 border-blue-200 text-left hover:shadow-md transition-all">
+                                <div class="font-bold text-blue-900">Balanced Plate Method</div>
+                                <div class="text-sm text-blue-700 mt-1">Half veg, quarter protein, quarter starch. Most sustainable.</div>
+                            </button>
+                            <button onclick="selectDietMode(this, 'high-protein')" class="diet-mode bg-white p-4 rounded-xl border-2 border-slate-200 text-left hover:shadow-md transition-all opacity-75">
+                                <div class="font-bold text-slate-900">Higher Protein</div>
+                                <div class="text-sm text-slate-600 mt-1">Protein-forward for satiety. Preserves muscle mass.</div>
+                            </button>
+                            <button onclick="selectDietMode(this, 'low-carb')" class="diet-mode bg-white p-4 rounded-xl border-2 border-slate-200 text-left hover:shadow-md transition-all opacity-75">
+                                <div class="font-bold text-slate-900">Moderate Low-Carb</div>
+                                <div class="text-sm text-slate-600 mt-1">Reduced starch portions, more non-starchy vegetables.</div>
+                            </button>
+                            <button onclick="selectDietMode(this, 'diabetic')" class="diet-mode bg-white p-4 rounded-xl border-2 border-slate-200 text-left hover:shadow-md transition-all opacity-75">
+                                <div class="font-bold text-slate-900">Diabetes-Friendly Plate</div>
+                                <div class="text-sm text-slate-600 mt-1">Emphasizes low glycemic impact and quality carbs.</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-8 max-w-4xl mx-auto">
+                    <button onclick="goToStep(1)" class="px-6 py-3 text-slate-600 font-medium hover:text-slate-900 flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+                    </button>
+                    <button onclick="goToStep(3)" class="bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition shadow-lg flex items-center gap-2">
+                        Continue <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: User Profile -->
+            <div id="step3" class="hidden fade-in">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-3">Personal Profile</h2>
+                    <p class="text-slate-600">This determines your personalized calorie target and portion sizes</p>
+                </div>
+
+                <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-slate-100">
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Age</label>
+                            <input type="number" id="age" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none" placeholder="30" min="18" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Sex</label>
+                            <select id="sex" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Current Weight (kg)</label>
+                            <input type="number" id="weight" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="75" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Height (cm)</label>
+                            <input type="number" id="height" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="170">
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Activity Level</label>
+                        <select id="activity" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="1.2">Sedentary (Little to no exercise)</option>
+                            <option value="1.375">Lightly Active (1-3 days/week)</option>
+                            <option value="1.55">Moderately Active (3-5 days/week)</option>
+                            <option value="1.725">Very Active (6-7 days/week)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Goal Weight Loss Pace</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="selectPace(this, 0.25)" class="pace-btn active ring-2 ring-emerald-500 bg-emerald-50 border-emerald-200 border rounded-lg p-3 text-center">
+                                <div class="font-bold text-emerald-900">Gradual</div>
+                                <div class="text-xs text-emerald-700">0.25 kg/week</div>
+                                <div class="text-xs text-emerald-600 mt-1">Most sustainable</div>
+                            </button>
+                            <button onclick="selectPace(this, 0.5)" class="pace-btn bg-white border-slate-200 border rounded-lg p-3 text-center hover:bg-slate-50">
+                                <div class="font-bold text-slate-900">Moderate</div>
+                                <div class="text-xs text-slate-600">0.5 kg/week</div>
+                                <div class="text-xs text-slate-500 mt-1">Steady loss</div>
+                            </button>
+                            <button onclick="selectPace(this, 1.0)" class="pace-btn bg-white border-slate-200 border rounded-lg p-3 text-center hover:bg-slate-50 opacity-75">
+                                <div class="font-bold text-slate-900">Active</div>
+                                <div class="text-xs text-slate-600">1.0 kg/week</div>
+                                <div class="text-xs text-slate-500 mt-1">Requires supervision</div>
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2 italic">* CDC recommends 0.5-1 kg (1-2 lbs) per week for sustainable results</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-slate-600">Estimated Daily Calories:</span>
+                            <span id="calorie-display" class="text-2xl font-bold text-emerald-600">--</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-slate-600">Weekly Weight Loss:</span>
+                            <span id="loss-display" class="text-lg font-semibold text-slate-800">0.5 kg</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between mt-8">
+                        <button onclick="goToStep(2)" class="px-6 py-3 text-slate-600 font-medium hover:text-slate-900 flex items-center gap-2">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+                        </button>
+                        <button onclick="generatePlan()" class="bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition shadow-lg flex items-center gap-2">
+                            Generate Plan <i data-lucide="check" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Generated Plan -->
+            <div id="step4" class="hidden fade-in">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full mb-4">
+                        <i data-lucide="check-circle" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-2">Your Monthly Plan is Ready</h2>
+                    <p class="text-slate-600">Based on <span id="result-country" class="font-semibold text-emerald-600"></span> guidelines • <span id="result-calories" class="font-semibold"></span> cal/day</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                    <!-- Sidebar: Summary -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
+                            <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-5 h-5 text-emerald-600"></i>
+                                Daily Targets
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-slate-600">Vegetables</span>
+                                        <span class="font-semibold text-emerald-600">50%</span>
+                                    </div>
+                                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-emerald-500 w-1/2 rounded-full"></div>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">~2.5 cups non-starchy</p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-slate-600">Protein</span>
+                                        <span class="font-semibold text-blue-600">25%</span>
+                                    </div>
+                                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-500 w-1/4 rounded-full"></div>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">~4-6 oz equivalents</p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-slate-600">Grains/Starch</span>
+                                        <span class="font-semibold text-amber-600">25%</span>
+                                    </div>
+                                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-amber-500 w-1/4 rounded-full"></div>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">~3-5 oz equivalents</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-slate-100">
+                                <h4 class="font-semibold text-slate-900 mb-3">Active Restrictions</h4>
+                                <div id="active-restrictions-list" class="flex flex-wrap gap-2">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-slate-100">
+                                <button onclick="togglePortionGuide()" class="w-full py-2 text-emerald-600 font-medium text-sm hover:bg-emerald-50 rounded-lg transition flex items-center justify-center gap-2">
+                                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                                    View Portion Equivalents
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Safety Notice -->
+                        <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <h4 class="font-semibold text-blue-900 mb-1">Medical Disclaimer</h4>
+                                    <p class="text-xs text-blue-800 leading-relaxed">
+                                        This plan provides general nutrition guidance. If you have diabetes, celiac disease, or other medical conditions, please consult your healthcare provider before starting.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content: 4-Week Plan -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+                            <div class="flex border-b border-slate-200">
+                                <button onclick="switchWeek(1)" id="tab-week1" class="flex-1 py-4 px-6 text-center font-semibold text-emerald-600 border-b-2 border-emerald-600 bg-emerald-50/50">Week 1</button>
+                                <button onclick="switchWeek(2)" id="tab-week2" class="flex-1 py-4 px-6 text-center font-semibold text-slate-500 hover:text-slate-700">Week 2</button>
+                                <button onclick="switchWeek(3)" id="tab-week3" class="flex-1 py-4 px-6 text-center font-semibold text-slate-500 hover:text-slate-700">Week 3</button>
+                                <button onclick="switchWeek(4)" id="tab-week4" class="flex-1 py-4 px-6 text-center font-semibold text-slate-500 hover:text-slate-700">Week 4</button>
+                            </div>
+
+                            <div class="p-6" id="week-content">
+                                <!-- Week content populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Grocery List Preview -->
+                        <div class="mt-6 bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
+                            <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                <i data-lucide="shopping-cart" class="w-5 h-5 text-emerald-600"></i>
+                                Weekly Grocery Focus
+                            </h3>
+                            <div id="grocery-list" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button onclick="resetPlanner()" class="text-slate-500 hover:text-emerald-600 font-medium flex items-center gap-2 mx-auto transition">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        Start Over
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Portion Guide Modal -->
+    <div id="portion-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white">
+                <h3 class="text-xl font-bold text-slate-900">Standard Portion Equivalents</h3>
+                <button onclick="togglePortionGuide()" class="p-2 hover:bg-slate-100 rounded-full transition">
+                    <i data-lucide="x" class="w-6 h-6 text-slate-600"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                    <h4 class="font-bold text-emerald-900 mb-2">Plate Method Geometry</h4>
+                    <div class="w-32 h-32 portion-visual mx-auto mb-4 border-4 border-white shadow-lg"></div>
+                    <div class="text-sm text-emerald-800 text-center">
+                        <span class="inline-block w-3 h-3 bg-emerald-500 rounded-full mr-1"></span> 50% Non-starchy vegetables<br>
+                        <span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-1"></span> 25% Protein<br>
+                        <span class="inline-block w-3 h-3 bg-amber-500 rounded-full mr-1"></span> 25% Grains/Starch
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border rounded-xl p-4">
+                        <h5 class="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <i data-lucide="wheat" class="w-4 h-4 text-amber-600"></i> Grains (1 oz eq)
+                        </h5>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• 1 slice bread</li>
+                            <li>• ½ cup cooked rice/pasta</li>
+                            <li>• 1 cup ready-to-eat cereal</li>
+                            <li>• 1 small tortilla (6")</li>
+                        </ul>
+                    </div>
+                    <div class="border rounded-xl p-4">
+                        <h5 class="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <i data-lucide="beef" class="w-4 h-4 text-red-600"></i> Protein (1 oz eq)
+                        </h5>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• 1 oz meat/poultry/fish</li>
+                            <li>• ¼ cup cooked beans</li>
+                            <li>• 1 egg</li>
+                            <li>• 1 tbsp peanut butter</li>
+                            <li>• ½ oz nuts/seeds</li>
+                        </ul>
+                    </div>
+                    <div class="border rounded-xl p-4">
+                        <h5 class="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <i data-lucide="carrot" class="w-4 h-4 text-emerald-600"></i> Vegetables (1 cup)
+                        </h5>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• 1 cup raw/cooked veg</li>
+                            <li>• 2 cups raw leafy greens</li>
+                            <li>• 1 cup vegetable juice</li>
+                        </ul>
+                    </div>
+                    <div class="border rounded-xl p-4">
+                        <h5 class="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <i data-lucide="apple" class="w-4 h-4 text-red-500"></i> Fruit (1 cup)
+                        </h5>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• 1 cup fresh/frozen fruit</li>
+                            <li>• ½ cup dried fruit</li>
+                            <li>• 1 cup 100% juice</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+                    <p class="text-sm text-amber-800">
+                        <strong>Note:</strong> These are standard US equivalents. Your selected country may use local measurements (e.g., grams in UK/EU, traditional measures in Nigeria/India). All portions are adjusted to your calculated calorie target.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guidelines Section -->
+    <section id="guidelines" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Evidence-Based Foundation</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    Our system synthesizes official Food-Based Dietary Guidelines (FBDGs) from 100+ countries, 
+                    combined with clinical evidence on portion control and sustainable weight loss.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 text-emerald-600">
+                        <i data-lucide="globe" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Country-Specific</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Links to official FBDGs from FAO/WHO repositories. Adapts local ingredients, meal patterns, 
+                        and measurement units while maintaining universal plate geometry principles.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600">
+                        <i data-lucide="shield-alert" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Safety First</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Medical restrictions (celiac, allergies, diabetes) trigger hard constraints and cross-contact warnings. 
+                        Gradual weight loss pace (0.5-1kg/week) as recommended by CDC/WHO.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 text-amber-600">
+                        <i data-lucide="scale" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Portion Geometry</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Uses validated plate method (½ veg, ¼ protein, ¼ starch) rather than rigid diet names. 
+                        Standardized serving equivalents allow precise portion control across any cuisine.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Section -->
+    <section id="safety" class="py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900">Important Safety Information</h2>
+            </div>
+
+            <div class="prose prose-slate max-w-none">
+                <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg mb-6">
+                    <h3 class="text-lg font-bold text-red-900 mb-2">Medical Restrictions Are Not Preferences</h3>
+                    <p class="text-red-800 mb-2">
+                        If you have selected Celiac Disease, food allergies, kidney disease, or diabetes, please note:
+                    </p>
+                    <ul class="list-disc list-inside text-red-800 space-y-1 text-sm">
+                        <li>This tool provides general guidance only and does not replace medical advice</li>
+                        <li>Always verify ingredient labels for allergens, even with "safe" recipes</li>
+                        <li>Cross-contact warnings are provided but cannot guarantee safety in home kitchens</li>
+                        <li>Diabetes meal planning should be verified with your healthcare provider</li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-xl">
+                        <h4 class="font-bold text-slate-900 mb-2">Weight Loss Expectations</h4>
+                        <p class="text-sm text-slate-600">
+                            Research indicates gradual weight loss (1-2 lbs or 0.5-1kg per week) is more sustainable 
+                            than rapid loss. Our calculator defaults to safe, conservative deficits.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl">
+                        <h4 class="font-bold text-slate-900 mb-2">Children & Special Populations</h4>
+                        <p class="text-sm text-slate-600">
+                            This tool is designed for adults 18+. Pregnant individuals, children, or those with 
+                            eating disorder histories should seek specialized medical nutrition therapy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-bold">N</div>
+                    <span class="text-xl font-bold text-white">NutriGlobal</span>
+                </div>
+                <p class="text-sm text-slate-400 max-w-md">
+                    Building culturally-relevant, medically-aware nutrition tools for sustainable weight management. 
+                    Based on FAO dietary guidelines and peer-reviewed clinical evidence.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://www.fao.org/nutrition/education/food-dietary-guidelines" target="_blank" class="hover:text-emerald-400 transition">FAO Dietary Guidelines</a></li>
+                    <li><a href="https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner" target="_blank" class="hover:text-emerald-400 transition">NIDDK Body Weight Planner</a></li>
+                    <li><a href="https://www.myplate.gov" target="_blank" class="hover:text-emerald-400 transition">USDA MyPlate</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Data Sources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li>USDA FoodData Central</li>
+                    <li>WHO Healthy Diet Guidelines</li>
+                    <li>CDC Healthy Weight Guidelines</li>
+                    <li>Diabetes Plate Method (ADA)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-slate-800 text-xs text-slate-500 text-center">
+            <p>Disclaimer: This website provides general nutrition information for educational purposes only. It is not intended as medical advice. 
+            Consult a healthcare provider before starting any weight loss program, especially if you have medical conditions or food allergies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Data
+        const countries = [
+            { code: 'us', name: 'United States', flag: '🇺🇸', guideline: 'USDA MyPlate', staples: ['Chicken', 'Turkey', 'Sweet Potato', 'Quinoa', 'Greek Yogurt'] },
+            { code: 'ng', name: 'Nigeria', flag: '🇳🇬', guideline: 'Nigeria FBDG', staples: ['Fish', 'Beans', 'Vegetable Soup', 'Yam', 'Plantain'] },
+            { code: 'in', name: 'India', flag: '🇮🇳', guideline: 'Indian Dietary Guidelines', staples: ['Lentils', 'Chicken/Fish', 'Vegetable Curry', 'Brown Rice', 'Roti'] },
+            { code: 'mx', name: 'Mexico', flag: '🇲🇽', guideline: 'Mexico FBDG', staples: ['Beans', 'Chicken', 'Salsa', 'Corn Tortillas', 'Avocado'] },
+            { code: 'jp', name: 'Japan', flag: '🇯🇵', guideline: 'Japanese Dietary Guidelines', staples: ['Fish', 'Tofu', 'Miso Soup', 'Rice (portion)', 'Vegetables'] },
+            { code: 'it', name: 'Italy', flag: '🇮🇹', guideline: 'Italian Guidelines', staples: ['Fish', 'Legumes', 'Vegetables', 'Pasta (measured)', 'Olive Oil (limited)'] },
+            { code: 'gb', name: 'United Kingdom', flag: '🇬🇧', guideline: 'NHS Eatwell Guide', staples: ['Chicken', 'Beans', 'Vegetables', 'Potatoes', 'Low-fat Dairy'] },
+            { code: 'br', name: 'Brazil', flag: '🇧🇷', guideline: 'Brazil FBDG', staples: ['Beans', 'Rice', 'Fish', 'Vegetables', 'Fruits'] },
+            { code: 'cn', name: 'China', flag: '🇨🇳', guideline: 'Chinese Dietary Guidelines', staples: ['Tofu', 'Fish', 'Vegetables', 'Rice', 'Lean Pork'] },
+            { code: 'fr', name: 'France', flag: '🇫🇷', guideline: 'France PNNS', staples: ['Fish', 'Poultry', 'Vegetables', 'Whole Grains', 'Dairy'] },
+            { code: 'kr', name: 'South Korea', flag: '🇰🇷', guideline: 'Korean Guidelines', staples: ['Fish', 'Tofu', 'Kimchi', 'Rice (mixed grain)', 'Vegetables'] },
+            { code: 'ca', name: 'Canada', flag: '🇨🇦', guideline: 'Canada Food Guide', staples: ['Fish', 'Legumes', 'Vegetables', 'Whole Grains', 'Nuts'] }
+        ];
+
+        const mealTemplates = {
+            breakfast: [
+                { name: "Protein + Fruit + Grain", base: "Scrambled eggs with spinach and whole grain toast", veg: "½ cup spinach", protein: "2 eggs", grain: "1 slice whole grain bread", alt: "Tofu scramble for vegan" },
+                { name: "Yogurt Parfait", base: "Greek yogurt with berries and oats", veg: "1 cup mixed berries", protein: "1 cup Greek yogurt", grain: "¼ cup oats", alt: "Coconut yogurt for dairy-free" },
+                { name: "Savory Porridge", base: "Oatmeal with nuts and seeds", veg: "½ cup grated apple", protein: "2 tbsp almond butter", grain: "½ cup cooked oats", alt: "Use certified GF oats if needed" }
+            ],
+            lunch: [
+                { name: "Plate Method Bowl", base: "Grilled protein with vegetables and starch", veg: "2 cups mixed vegetables", protein: "4 oz grilled chicken/fish/tofu", grain: "½ cup cooked grain", alt: "Extra beans for protein if vegan" },
+                { name: "Hearty Salad", base: "Large salad with beans and quinoa", veg: "2 cups leafy greens + vegetables", protein: "½ cup chickpeas", grain: "½ cup cooked quinoa", alt: "Add cheese if not vegan" },
+                { name: "Soup + Side", base: "Vegetable soup with bread", veg: "1.5 cups vegetable soup", protein: "½ cup lentils/beans in soup", grain: "1 small roll", alt: "Ensure broth is low sodium if needed" }
+            ],
+            dinner: [
+                { name: "Traditional Plate", base: "Roasted protein with vegetables and starch", veg: "2 cups roasted vegetables", protein: "4 oz fish/chicken/tempeh", grain: "½ cup sweet potato or rice", alt: "Cauliflower rice for low-carb" },
+                { name: "Stir-Fry", base: "Vegetable stir-fry with protein", veg: "2 cups mixed vegetables", protein: "4 oz tofu/shrimp/chicken", grain: "½ cup brown rice", alt: "Use tamari instead of soy if GF" },
+                { name: "Bean Chili", base: "Vegetarian chili with cornbread", veg: "1.5 cups chili (veg-heavy)", protein: "½ cup beans in chili", grain: "1 small piece cornbread", alt: "Check chili spice blends for allergens" }
+            ]
+        };
+
+        // State
+        let currentStep = 1;
+        let selectedCountry = null;
+        let restrictions = {
+            medical: [],
+            lifestyle: [],
+            allergens: [],
+            dietMode: 'balanced'
+        };
+        let userProfile = {
+            age: 30,
+            sex: 'female',
+            weight: 75,
+            height: 170,
+            activity: 1.2,
+            pace: 0.5
+        };
+        let calculatedCalories = 2000;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCountries();
+            setupInputListeners();
+        });
+
+        function renderCountries() {
+            const grid = document.getElementById('country-grid');
+            grid.innerHTML = countries.map(country => `
+                <button onclick="selectCountry('${country.code}')" 
+                        class="country-card bg-white rounded-xl p-4 border-2 border-slate-100 hover:border-emerald-300 transition-all text-center group ${selectedCountry === country.code ? 'ring-2 ring-emerald-500 border-emerald-500' : ''}"
+                        id="country-${country.code}">
+                    <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">${country.flag}</div>
+                    <div class="font-semibold text-slate-900 text-sm">${country.name}</div>
+                    <div class="text-xs text-slate-500 mt-1">${country.guideline}</div>
+                </button>
+            `).join('');
+        }
+
+        function selectCountry(code) {
+            selectedCountry = code;
+            renderCountries();
+            
+            // Update progress
+            setTimeout(() => {
+                document.getElementById('progress-bar-1').style.width = '100%';
+                document.getElementById('step2-indicator').classList.remove('bg-slate-200', 'text-slate-500');
+                document.getElementById('step2-indicator').classList.add('bg-emerald-600', 'text-white');
+                
+                setTimeout(() => {
+                    document.getElementById('step1').classList.add('hidden');
+                    document.getElementById('step2').classList.remove('hidden');
+                    currentStep = 2;
+                    lucide.createIcons();
+                }, 500);
+            }, 300);
+        }
+
+        function goToStep(step) {
+            // Hide all steps
+            ['step1', 'step2', 'step3', 'step4'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            
+            // Show target step
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            
+            // Update indicators
+            for (let i = 1; i <= 4; i++) {
+                const indicator = document.getElementById(`step${i}-indicator`);
+                const bar = document.getElementById(`progress-bar-${i-1}`);
+                
+                if (i <= step) {
+                    indicator.classList.remove('bg-slate-200', 'text-slate-500');
+                    indicator.classList.add('bg-emerald-600', 'text-white');
+                    if (bar) bar.style.width = '100%';
+                } else {
+                    indicator.classList.add('bg-slate-200', 'text-slate-500');
+                    indicator.classList.remove('bg-emerald-600', 'text-white');
+                    if (bar) bar.style.width = '0%';
+                }
+            }
+            
+            currentStep = step;
+            lucide.createIcons();
+        }
+
+        function toggleRestriction(btn, type) {
+            btn.classList.toggle('active');
+            
+            if (['celiac', 'allergen', 'diabetes', 'kidney', 'heart'].includes(type)) {
+                if (btn.classList.contains('active')) {
+                    restrictions.medical.push(type);
+                } else {
+                    restrictions.medical = restrictions.medical.filter(r => r !== type);
+                }
+                
+                // Show allergen selector if allergen selected
+                if (type === 'allergen') {
+                    document.getElementById('allergen-selector').classList.toggle('hidden');
+                }
+            } else {
+                if (btn.classList.contains('active')) {
+                    restrictions.lifestyle.push(type);
+                } else {
+                    restrictions.lifestyle = restrictions.lifestyle.filter(r => r !== type);
+                }
+            }
+            
+            // Auto-check logic
+            if (type === 'vegan' && btn.classList.contains('active')) {
+                // Auto-select vegetarian if vegan selected
+                const vegBtn = Array.from(document.querySelectorAll('.restriction-tag')).find(b => b.textContent.includes('Vegetarian'));
+                if (vegBtn && !vegBtn.classList.contains('active')) vegBtn.click();
+            }
+        }
+
+        function selectDietMode(btn, mode) {
+            document.querySelectorAll('.diet-mode').forEach(b => {
+                b.classList.remove('ring-2', 'ring-blue-500', 'border-blue-200');
+                b.classList.add('border-slate-200', 'opacity-75');
+                b.querySelector('.font-bold').classList.remove('text-blue-900');
+                b.querySelector('.font-bold').classList.add('text-slate-900');
+            });
+            
+            btn.classList.remove('border-slate-200', 'opacity-75');
+            btn.classList.add('ring-2', 'ring-blue-500', 'border-blue-200');
+            btn.querySelector('.font-bold').classList.remove('text-slate-900');
+            btn.querySelector('.font-bold').classList.add('text-blue-900');
+            
+            restrictions.dietMode = mode;
+        }
+
+        function selectPace(btn, pace) {
+            document.querySelectorAll('.pace-btn').forEach(b => {
+                b.classList.remove('ring-2', 'ring-emerald-500', 'bg-emerald-50', 'border-emerald-200');
+                b.classList.add('bg-white', 'border-slate-200');
+            });
+            
+            btn.classList.remove('bg-white', 'border-slate-200');
+            btn.classList.add('ring-2', 'ring-emerald-500', 'bg-emerald-50', 'border-emerald-200');
+            userProfile.pace = pace;
+            updateCalorieCalculation();
+        }
+
+        function setupInputListeners() {
+            ['age', 'weight', 'height', 'sex', 'activity'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateCalorieCalculation);
+                document.getElementById(id).addEventListener('input', updateCalorieCalculation);
+            });
+        }
+
+        function updateCalorieCalculation() {
+            const age = parseInt(document.getElementById('age').value) || 30;
+            const weight = parseFloat(document.getElementById('weight').value) || 75;
+            const height = parseInt(document.getElementById('height').value) || 170;
+            const sex = document.getElementById('sex').value;
+            const activity = parseFloat(document.getElementById('activity').value);
+            
+            // Mifflin-St Jeor Equation
+            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            bmr += (sex === 'male') ? 5 : -161;
+            
+            const tdee = bmr * activity;
+            const deficit = userProfile.pace * 7700 / 7; // 7700 calories per kg
+            calculatedCalories = Math.max(1200, Math.round(tdee - deficit));
+            
+            document.getElementById('calorie-display').textContent = calculatedCalories.toLocaleString();
+            document.getElementById('loss-display').textContent = userProfile.pace + ' kg';
+        }
+
+        function generatePlan() {
+            // Collect allergens
+            restrictions.allergens = Array.from(document.querySelectorAll('.allergen-check:checked')).map(cb => cb.value);
+            
+            // Update profile
+            userProfile.age = parseInt(document.getElementById('age').value) || 30;
+            userProfile.weight = parseFloat(document.getElementById('weight').value) || 75;
+            userProfile.height = parseInt(document.getElementById('height').value) || 170;
+            userProfile.sex = document.getElementById('sex').value;
+            userProfile.activity = parseFloat(document.getElementById('activity').value);
+            
+            // Generate content
+            const country = countries.find(c => c.code === selectedCountry);
+            document.getElementById('result-country').textContent = country.name;
+            document.getElementById('result-calories').textContent = calculatedCalories.toLocaleString();
+            
+            // Render restrictions
+            const allRestrictions = [...restrictions.medical, ...restrictions.lifestyle];
+            document.getElementById('active-restrictions-list').innerHTML = allRestrictions.map(r => {
+                const colors = {
+                    celiac: 'bg-red-100 text-red-800',
+                    allergen: 'bg-red-100 text-red-800',
+                    diabetes: 'bg-blue-100 text-blue-800',
+                    kidney: 'bg-purple-100 text-purple-800',
+                    heart: 'bg-pink-100 text-pink-800',
+                    vegetarian: 'bg-emerald-100 text-emerald-800',
+                    vegan: 'bg-green-100 text-green-800',
+                    lactose: 'bg-yellow-100 text-yellow-800',
+                    halal: 'bg-teal-100 text-teal-800',
+                    kosher: 'bg-indigo-100 text-indigo-800'
+                };
+                return `<span class="px-3 py-1 rounded-full text-xs font-semibold ${colors[r] || 'bg-slate-100 text-slate-800'} capitalize">${r.replace('-', ' ')}</span>`;
+            }).join('');
+            
+            // Render week 1
+            switchWeek(1);
+            
+            // Render groceries
+            renderGroceries(country);
+            
+            // Go to step 4
+            goToStep(4);
+        }
+
+        function switchWeek(weekNum) {
+            // Update tabs
+            [1, 2, 3, 4].forEach(w => {
+                const tab = document.getElementById(`tab-week${w}`);
+                if (w === weekNum) {
+                    tab.classList.add('text-emerald-600', 'border-b-2', 'border-emerald-600', 'bg-emerald-50/50');
+                    tab.classList.remove('text-slate-500');
+                } else {
+                    tab.classList.remove('text-emerald-600', 'border-b-2', 'border-emerald-600', 'bg-emerald-50/50');
+                    tab.classList.add('text-slate-500');
+                }
+            });
+            
+            // Generate week content
+            const container = document.getElementById('week-content');
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            container.innerHTML = days.map((day, idx) => {
+                // Vary meals based on week and day
+                const bIdx = (weekNum - 1 + idx) % 3;
+                const lIdx = (weekNum + idx) % 3;
+                const dIdx = (weekNum + 1 + idx) % 3;
+                
+                const breakfast = customizeMeal(mealTemplates.breakfast[bIdx]);
+                const lunch = customizeMeal(mealTemplates.lunch[lIdx]);
+                const dinner = customizeMeal(mealTemplates.dinner[dIdx]);
+                
+                return `
+                    <div class="mb-6 last:mb-0 border-b border-slate-100 last:border-0 pb-6 last:pb-0">
+                        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">${day[0]}</span>
+                            ${day}
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="meal-card bg-slate-50 rounded-lg p-4 border border-slate-100">
+                                <div class="text-xs font-bold text-emerald-600 mb-1 uppercase tracking-wide">Breakfast</div>
+                                <div class="font-semibold text-slate-900 text-sm mb-2">${breakfast.name}</div>
+                                <div class="text-xs text-slate-600 space-y-1">
+                                    <div class="flex items-start gap-1">
+                                        <span class="text-emerald-500">▪</span> ${breakfast.portions}
+                                    </div>
+                                    ${breakfast.note ? `<div class="text-amber-600 italic mt-1">${breakfast.note}</div>` : ''}
+                                </div>
+                            </div>
+                            <div class="meal-card bg-slate-50 rounded-lg p-4 border border-slate-100">
+                                <div class="text-xs font-bold text-blue-600 mb-1 uppercase tracking-wide">Lunch</div>
+                                <div class="font-semibold text-slate-900 text-sm mb-2">${lunch.name}</div>
+                                <div class="text-xs text-slate-600 space-y-1">
+                                    <div class="flex items-start gap-1">
+                                        <span class="text-blue-500">▪</span> ${lunch.portions}
+                                    </div>
+                                    ${lunch.note ? `<div class="text-amber-600 italic mt-1">${lunch.note}</div>` : ''}
+                                </div>
+                            </div>
+                            <div class="meal-card bg-slate-50 rounded-lg p-4 border border-slate-100">
+                                <div class="text-xs font-bold text-amber-600 mb-1 uppercase tracking-wide">Dinner</div>
+                                <div class="font-semibold text-slate-900 text-sm mb-2">${dinner.name}</div>
+                                <div class="text-xs text-slate-600 space-y-1">
+                                    <div class="flex items-start gap-1">
+                                        <span class="text-amber-500">▪</span> ${dinner.portions}
+                                    </div>
+                                    ${dinner.note ? `<div class="text-amber-600 italic mt-1">${dinner.note}</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        function customizeMeal(meal) {
+            let portions = `${meal.veg}, ${meal.protein}, ${meal.grain}`;
+            let note = '';
+            
+            // Adjust for restrictions
+            if (restrictions.lifestyle.includes('vegan')) {
+                if (meal.protein.includes('egg') || meal.protein.includes('yogurt')) {
+                    portions = portions.replace(meal.protein, 'tofu/tempeh (6oz)');
+                    note = 'Vegan protein swap applied';
+                }
+            }
+            
+            if (restrictions.medical.includes('celiac')) {
+                if (meal.grain.includes('bread') || meal.grain.includes('wheat') || meal.grain.includes('pasta')) {
+                    portions = portions.replace(meal.grain, 'GF grain (½ cup)');
+                    note = (note ? note + '; ' : '') + 'Gluten-free option';
+                }
+            }
+            
+            if (restrictions.medical.includes('diabetes')) {
+                note = (note ? note + '; ' : '') + 'Monitor portion size for glucose control';
+            }
+            
+            if (restrictions.medical.includes('heart')) {
+                note = (note ? note + '; ' : '') + 'Use herbs instead of salt; check sodium';
+            }
+            
+            if (calculatedCalories < 1500) {
+                portions = portions.replace('½ cup', '⅓ cup').replace('4 oz', '3 oz');
+            }
+            
+            return { ...meal, portions, note };
+        }
+
+        function renderGroceries(country) {
+            const container = document.getElementById('grocery-list');
+            const staples = country.staples;
+            
+            // Add restriction-specific items
+            let items = [...staples];
+            if (restrictions.lifestyle.includes('vegan')) items.push('Nutritional Yeast', 'Plant Milk');
+            if (restrictions.medical.includes('celiac')) items.push('GF Grains', 'Tamari');
+            if (restrictions.medical.includes('diabetes')) items.push('Cinnamon', 'Non-starchy veg');
+            
+            container.innerHTML = items.map(item => `
+                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 text-sm">
+                    <i data-lucide="check-square" class="w-4 h-4 text-emerald-600"></i>
+                    <span class="text-slate-700">${item}</span>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function togglePortionGuide() {
+            const modal = document.getElementById('portion-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function resetPlanner() {
+            selectedCountry = null;
+            restrictions = { medical: [], lifestyle: [], allergens: [], dietMode: 'balanced' };
+            currentStep = 1;
+            
+            // Reset UI
+            document.querySelectorAll('.restriction-tag').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.allergen-check').forEach(cb => cb.checked = false);
+            document.getElementById('allergen-selector').classList.add('hidden');
+            
+            goToStep(1);
+            renderCountries();
+        }
+
+        function scrollToCalculator() {
+            document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close modal on outside click
+        document.getElementById('portion-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) togglePortionGuide();
+        });
+    </script>
+</body>
+</html>
