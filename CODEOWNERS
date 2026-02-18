@@ -1,0 +1,52 @@
+# DietMe CODEOWNERS — Controls who must approve changes to critical paths
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  CRITICAL: This file itself requires admin approval to modify   ║
+# ╚══════════════════════════════════════════════════════════════════╝
+
+# Default: all changes require at least one maintainer review
+*                                   @dietme/maintainers
+
+# ── CI/CD Pipeline (highest security sensitivity) ────────────────
+# Any change to workflows can compromise the entire build pipeline
+/.github/                           @dietme/security-team
+/.github/workflows/                 @dietme/security-team
+
+# ── Authentication & Authorization ───────────────────────────────
+/src/auth/                          @dietme/security-team
+/src/middleware/                     @dietme/security-team
+/src/lib/auth/                      @dietme/security-team
+
+# ── Payment Processing ───────────────────────────────────────────
+/src/payments/                      @dietme/security-team @dietme/backend-lead
+/src/lib/stripe/                    @dietme/security-team @dietme/backend-lead
+
+# ── Metabolic Scoring Engine (clinical accuracy) ─────────────────
+/src/scoring/                       @dietme/clinical-team @dietme/backend-lead
+/src/lib/scoring/                   @dietme/clinical-team @dietme/backend-lead
+/src/protocols/                     @dietme/clinical-team
+
+# ── Database & Data Models ───────────────────────────────────────
+/prisma/                            @dietme/backend-lead @dietme/security-team
+/src/db/                            @dietme/backend-lead
+/migrations/                        @dietme/backend-lead
+
+# ── Infrastructure & Configuration ───────────────────────────────
+/infrastructure/                    @dietme/devops-lead @dietme/security-team
+/docker/                            @dietme/devops-lead @dietme/security-team
+Dockerfile                          @dietme/devops-lead @dietme/security-team
+docker-compose*.yml                 @dietme/devops-lead @dietme/security-team
+
+# ── Environment & Secrets Configuration ──────────────────────────
+*.env*                              @dietme/security-team
+.env.example                        @dietme/security-team
+
+# ── Security-Sensitive Configuration ─────────────────────────────
+next.config.*                       @dietme/security-team @dietme/frontend-lead
+package.json                        @dietme/maintainers
+package-lock.json                   @dietme/maintainers
+tsconfig.json                       @dietme/maintainers
+
+# ── This file ────────────────────────────────────────────────────
+CODEOWNERS                          @dietme/admin
