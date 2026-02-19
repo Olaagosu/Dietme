@@ -1,1 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietMe — Metabolic Clarity Platform</title>
+  <meta name="description" content="AI-powered preventive metabolic health assessment for adults 35+. Know your metabolic stability before symptoms speak.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --navy: #0A1628;
+      --navy-light: #111D33;
+      --navy-mid: #162036;
+      --border: #1F2D45;
+      --border-light: #2A3547;
+      --forest: #2D6A4F;
+      --forest-dark: #1B4332;
+      --sage: #52B788;
+      --sage-dim: #40916C;
+      --text: #E8ECF1;
+      --text-mid: #8896AB;
+      --text-dim: #6B7A90;
+      --text-muted: #4A5568;
+      --stable: #2D6A4F;
+      --mild: #7B6D2E;
+      --elevated: #B45309;
+      --significant: #991B1B;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .serif { font-family: 'Instrument Serif', Georgia, serif; }
+
+    /* ── UTILITIES ─────────────────────────────── */
+    .hidden { display: none !important; }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+    .container-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes barGrow { from { width: 0; } }
+    @keyframes scorePop {
+      from { opacity: 0; transform: scale(0.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .fade-in { animation: fadeUp 0.5s ease-out forwards; }
+    .fade-d1 { animation: fadeUp 0.5s ease-out 0.08s forwards; opacity: 0; }
+    .fade-d2 { animation: fadeUp 0.5s ease-out 0.16s forwards; opacity: 0; }
+    .fade-d3 { animation: fadeUp 0.5s ease-out 0.28s forwards; opacity: 0; }
+    .fade-d4 { animation: fadeUp 0.5s ease-out 0.4s forwards; opacity: 0; }
+    .fade-d5 { animation: fadeUp 0.5s ease-out 0.55s forwards; opacity: 0; }
+
+    /* ── NAV ───────────────────────────────────── */
+    .nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text);
+    }
+    .nav-logo {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--forest), var(--sage-dim));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: #fff;
+    }
+    .nav-name { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links span { color: var(--text-dim); font-size: 14px; cursor: pointer; }
+    .nav-links span:hover { color: var(--sage); }
+
+    /* ── BUTTONS ───────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; border-radius: 10px; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-weight: 600;
+      transition: all 0.2s ease; text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--forest); color: #fff;
+      padding: 14px 32px; font-size: 15px;
+    }
+    .btn-primary:hover { background: var(--sage-dim); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--text-mid);
+      border: 1px solid var(--border-light);
+      padding: 14px 28px; font-size: 15px;
+    }
+    .btn-outline:hover { border-color: var(--sage); color: var(--sage); }
+    .btn-sm { padding: 10px 22px; font-size: 14px; }
+    .btn:disabled {
+      opacity: 0.4; cursor: not-allowed; transform: none !important;
+    }
+
+    /* ── HERO ──────────────────────────────────── */
+    .hero { padding: 80px 0 60px; }
+    .hero-badge {
+      display: inline-block; background: rgba(45,106,79,0.15);
+      border: 1px solid rgba(45,106,79,0.3); border-radius: 100px;
+      padding: 6px 18px; font-size: 13px; color: var(--sage); margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(38px, 6.5vw, 72px); line-height: 1.08;
+      font-weight: 400; margin-bottom: 24px;
+    }
+    .hero h1 em {
+      display: block; font-size: clamp(16px, 2vw, 22px);
+      font-weight: 300; font-style: normal; margin-bottom: 6px;
+      color: var(--text-mid);
+    }
+    .hero h1 .accent { color: var(--sage); }
+    .hero p {
+      font-size: 17px; line-height: 1.7; color: var(--text-mid);
+      max-width: 520px; margin-bottom: 40px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* ── STATS BAR ─────────────────────────────── */
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      background: var(--navy-light); border-radius: 16px;
+      border: 1px solid var(--border); overflow: hidden;
+      margin: 0 0 60px;
+    }
+    .stat { padding: 24px 16px; text-align: center; }
+    .stat-num { font-size: 26px; font-weight: 700; color: var(--sage); margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--text-dim); }
+
+    /* ── HOW IT WORKS ──────────────────────────── */
+    .section-title {
+      text-align: center; margin-bottom: 40px; font-size: 32px; font-weight: 400;
+    }
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px; margin-bottom: 60px;
+    }
+    .step-card {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+    }
+    .step-num { color: var(--forest); font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+    .step-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .step-card p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+    /* ── DOMAINS ───────────────────────────────── */
+    .domains {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px; margin-bottom: 80px;
+    }
+    .domain-card {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px; text-align: center;
+    }
+    .domain-icon { font-size: 28px; color: var(--sage); margin-bottom: 10px; }
+    .domain-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .domain-card p { font-size: 12px; color: var(--text-dim); }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border); padding: 28px 0;
+      text-align: center; font-size: 12px; color: var(--text-muted);
+    }
+
+    /* ── ASSESSMENT ─────────────────────────────── */
+    .assess-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px;
+    }
+    .assess-back {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; font-size: 14px; font-family: inherit;
+    }
+    .assess-back:hover { color: var(--sage); }
+    .progress-bar {
+      height: 3px; background: var(--navy-light); border-radius: 2px;
+      margin-bottom: 8px;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--forest), var(--sage));
+      border-radius: 2px; transition: width 0.4s ease;
+    }
+    .progress-meta {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--text-muted); margin-bottom: 36px;
+    }
+    .section-header { margin-bottom: 32px; }
+    .section-header h2 { font-size: 28px; font-weight: 400; margin-bottom: 6px; }
+    .section-header p { color: var(--text-dim); font-size: 14px; }
+
+    .q-card {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px; margin-bottom: 20px;
+    }
+    .q-label {
+      display: block; font-size: 15px; font-weight: 500;
+      margin-bottom: 14px; line-height: 1.5;
+    }
+    .q-options { display: flex; flex-direction: column; gap: 8px; }
+    .q-opt {
+      padding: 11px 16px; background: var(--navy);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-mid); font-size: 14px; text-align: left;
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .q-opt:hover { border-color: var(--forest); color: var(--text); }
+    .q-opt.selected {
+      background: rgba(45,106,79,0.15); border-color: var(--forest);
+      color: var(--sage); font-weight: 600;
+    }
+    .q-input {
+      width: 100%; padding: 11px 16px; background: var(--navy);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-size: 15px; font-family: inherit; outline: none;
+    }
+    .q-input:focus { border-color: var(--forest); }
+    .q-input::placeholder { color: var(--text-muted); }
+    .q-note { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+    .assess-nav { display: flex; gap: 14px; margin-top: 32px; }
+    .assess-nav .btn { flex: 1; }
+
+    /* ── RESULTS ────────────────────────────────── */
+    .results-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 40px;
+    }
+    .results-date { font-size: 13px; color: var(--text-dim); }
+
+    .score-card {
+      background: linear-gradient(135deg, var(--navy-light), var(--navy-mid));
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 44px 28px; text-align: center; margin-bottom: 28px;
+      position: relative; overflow: hidden;
+    }
+    .score-card .glow {
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      filter: blur(60px); opacity: 0.15; pointer-events: none;
+    }
+    .score-label {
+      font-size: 13px; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: 2px; margin-bottom: 14px;
+    }
+    .score-number {
+      font-size: 88px; font-weight: 700; line-height: 1;
+      margin-bottom: 12px; animation: scorePop 0.7s ease-out 0.3s forwards; opacity: 0;
+    }
+    .score-badge {
+      display: inline-block; border-radius: 100px;
+      padding: 6px 20px; font-size: 14px; font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .score-interp {
+      font-size: 15px; line-height: 1.7; color: var(--text-mid);
+      max-width: 520px; margin: 0 auto;
+    }
+
+    /* Domain bars */
+    .domains-panel {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 28px;
+    }
+    .domains-panel h3 { font-size: 20px; margin-bottom: 20px; }
+    .domain-row { margin-bottom: 18px; }
+    .domain-row:last-child { margin-bottom: 0; }
+    .domain-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 7px;
+    }
+    .domain-name-wrap { display: flex; align-items: center; gap: 8px; }
+    .domain-name-icon { font-size: 16px; }
+    .domain-name { font-size: 14px; }
+    .domain-pri-tag {
+      font-size: 9px; background: var(--forest); color: #fff;
+      padding: 2px 8px; border-radius: 4px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .domain-score { font-size: 15px; font-weight: 700; }
+    .bar-track {
+      height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%; border-radius: 4px;
+      animation: barGrow 0.8s ease-out forwards;
+    }
+
+    /* Priority focus */
+    .priority-card {
+      background: linear-gradient(135deg, rgba(45,106,79,0.1), rgba(45,106,79,0.05));
+      border: 1px solid rgba(45,106,79,0.3); border-radius: 16px;
+      padding: 24px; margin-bottom: 28px;
+    }
+    .priority-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .priority-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(45,106,79,0.2); display: flex;
+      align-items: center; justify-content: center; font-size: 20px; color: var(--sage);
+    }
+    .priority-label {
+      font-size: 11px; color: var(--sage); text-transform: uppercase;
+      letter-spacing: 1.5px; font-weight: 600;
+    }
+    .priority-name { font-size: 20px; }
+    .priority-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+    /* Directives */
+    .dir-section h3 { font-size: 20px; margin-bottom: 18px; }
+    .dir-card {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px; margin-bottom: 14px;
+      position: relative; overflow: hidden;
+    }
+    .dir-locked {
+      position: absolute; inset: 0; background: rgba(10,22,40,0.85);
+      backdrop-filter: blur(4px); display: flex; align-items: center;
+      justify-content: center; z-index: 2; flex-direction: column; gap: 6px;
+    }
+    .dir-locked-icon { font-size: 22px; }
+    .dir-locked-text { font-size: 12px; color: var(--text-dim); }
+    .dir-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .dir-num {
+      font-size: 11px; color: var(--forest); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .dir-freq {
+      font-size: 12px; color: var(--sage); background: rgba(45,106,79,0.15);
+      padding: 3px 10px; border-radius: 4px;
+    }
+    .dir-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+    .dir-why { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+    .dir-why b { color: var(--sage); font-weight: 600; }
+
+    /* Upgrade */
+    .upgrade-box {
+      background: linear-gradient(135deg, var(--navy-mid), #1A2844);
+      border: 1px solid var(--border-light); border-radius: 16px;
+      padding: 32px; text-align: center; margin: 28px 0;
+    }
+    .upgrade-box h3 { font-size: 22px; margin-bottom: 10px; }
+    .upgrade-box p {
+      font-size: 14px; color: var(--text-dim); max-width: 460px;
+      margin: 0 auto 22px;
+    }
+    .upgrade-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* Protocol */
+    .proto-panel {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 28px;
+    }
+    .proto-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px;
+    }
+    .proto-tag {
+      font-size: 11px; color: var(--sage); text-transform: uppercase;
+      letter-spacing: 1.5px; font-weight: 600; margin-bottom: 4px;
+    }
+    .proto-title { font-size: 20px; }
+    .proto-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .proto-tab {
+      flex: 1; padding: 10px 8px; background: transparent;
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-muted); font-size: 13px; cursor: pointer;
+      font-family: inherit; text-align: center; transition: all 0.15s;
+    }
+    .proto-tab.active {
+      background: rgba(45,106,79,0.2); border-color: var(--forest);
+      color: var(--sage); font-weight: 600;
+    }
+    .proto-content {
+      background: rgba(10,22,40,0.5); border-radius: 12px; padding: 22px;
+    }
+    .proto-goal-label {
+      font-size: 11px; color: var(--sage); text-transform: uppercase;
+      letter-spacing: 1px; font-weight: 600; margin-bottom: 4px;
+    }
+    .proto-goal { font-size: 15px; font-weight: 600; margin-bottom: 20px; }
+    .proto-section-title {
+      font-size: 12px; color: var(--sage); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .proto-item {
+      display: flex; gap: 10px; margin-bottom: 8px;
+      font-size: 14px; color: var(--text-mid); line-height: 1.5;
+    }
+    .proto-item .dash { color: var(--forest); font-weight: 700; flex-shrink: 0; }
+    .proto-item .check { color: var(--sage); flex-shrink: 0; }
+    .proto-section { margin-bottom: 18px; }
+
+    /* Disclaimer */
+    .disclaimer {
+      background: rgba(10,22,40,0.5); border: 1px solid rgba(31,45,69,0.5);
+      border-radius: 10px; padding: 14px; text-align: center;
+      font-size: 12px; color: var(--text-muted); line-height: 1.6;
+      margin-top: 28px;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 34px; }
+      .hero p { font-size: 15px; }
+      .nav-links span { display: none; }
+      .score-number { font-size: 64px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ SCREEN: LANDING ═══ -->
+  <div id="screen-landing">
+    <div class="container-wide">
+      <nav class="nav">
+        <a href="#" class="nav-brand">
+          <div class="nav-logo">D</div>
+          <span class="nav-name">DietMe</span>
+        </a>
+        <div class="nav-links">
+          <span>About</span>
+          <span>Science</span>
+          <button class="btn btn-primary btn-sm" onclick="showScreen('assess')">Begin Assessment</button>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container-wide">
+      <div class="hero fade-in">
+        <div class="hero-badge">Metabolic Clarity Platform</div>
+        <h1 class="serif">
+          <em>From lifestyle patterns to</em>
+          Know your metabolic<br>
+          <span class="accent">stability</span> before<br>
+          symptoms speak.
+        </h1>
+        <p>A structured 25-question assessment that translates lifestyle patterns into a clear metabolic stability score. No guesswork. No hype. Evidence-informed clarity for adults who take their health seriously.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showScreen('assess')">Start Your Assessment &rarr;</button>
+          <button class="btn btn-outline" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How It Works</button>
+        </div>
+      </div>
+
+      <div class="stats fade-d2">
+        <div class="stat"><div class="stat-num">25</div><div class="stat-label">Structured Questions</div></div>
+        <div class="stat"><div class="stat-num">5</div><div class="stat-label">Health Domains</div></div>
+        <div class="stat"><div class="stat-num">0–100</div><div class="stat-label">Clarity Score</div></div>
+        <div class="stat"><div class="stat-num">35+</div><div class="stat-label">Adult-Focused</div></div>
+      </div>
+
+      <h2 id="how-it-works" class="serif section-title fade-d3">How DietMe works</h2>
+      <div class="steps fade-d3">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3 class="serif">Complete Assessment</h3>
+          <p>Answer 25 evidence-based questions across 5 metabolic domains. Takes approximately 8 minutes.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3 class="serif">Receive Your Score</h3>
+          <p>Get a Metabolic Stability Score (0–100) with domain-level breakdowns revealing exactly where instability exists.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3 class="serif">Follow Your Protocol</h3>
+          <p>Receive personalized directives and a structured 4-week protocol targeting your weakest metabolic domain.</p>
+        </div>
+      </div>
+
+      <h2 class="serif section-title fade-d4">Five domains of metabolic stability</h2>
+      <p style="text-align:center;color:var(--text-dim);font-size:14px;max-width:560px;margin:0 auto 36px;" class="fade-d4">Each domain represents a critical dimension of metabolic health. Your score reveals which domain needs immediate attention.</p>
+      <div class="domains fade-d4">
+        <div class="domain-card"><div class="domain-icon">&#9673;</div><h4>Body Composition</h4><p>Structural metabolic load</p></div>
+        <div class="domain-card"><div class="domain-icon">&#9672;</div><h4>Glucose Stability</h4><p>Energy and blood sugar</p></div>
+        <div class="domain-card"><div class="domain-icon">&#9670;</div><h4>Liver Load</h4><p>Dietary processing burden</p></div>
+        <div class="domain-card"><div class="domain-icon">&#9671;</div><h4>Inflammation</h4><p>Recovery and repair capacity</p></div>
+        <div class="domain-card"><div class="domain-icon">&#9651;</div><h4>Activity Resilience</h4><p>Movement and physical reserve</p></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      DietMe provides lifestyle-based metabolic stability insights. It does not diagnose or treat medical conditions.
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: ASSESSMENT ═══ -->
+  <div id="screen-assess" class="hidden">
+    <div class="container" style="padding-top:24px;padding-bottom:60px;">
+      <div class="assess-header">
+        <button class="assess-back" onclick="assessBack()">&larr; Back</button>
+        <span style="font-size:13px;color:var(--text-muted);" id="answer-count">0 of 25 answered</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:5%"></div></div>
+      <div class="progress-meta">
+        <span id="section-count">Section 1 of 5</span>
+        <span id="section-name"></span>
+      </div>
+      <div id="section-header" class="section-header"></div>
+      <div id="questions-container"></div>
+      <div class="assess-nav" id="assess-nav"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: RESULTS ═══ -->
+  <div id="screen-results" class="hidden">
+    <div class="container" style="padding-top:28px;padding-bottom:60px;" id="results-container"></div>
+  </div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// DIETME APPLICATION ENGINE
+// ══════════════════════════════════════════════════════════════
+
+// ── DATA ─────────────────────────────────────────────────────
+const SECTIONS = [
+  {
+    title: "Body Composition",
+    subtitle: "Understanding your physical baseline",
+    questions: [
+      { id:"age", text:"What is your age range?", options:[["under35","Under 35"],["35to44","35–44"],["45to54","45–54"],["55to64","55–64"],["65plus","65+"]] },
+      { id:"height", text:"Your height in centimeters", type:"number", placeholder:"e.g. 170" },
+      { id:"waist", text:"Waist circumference in centimeters", type:"number", placeholder:"e.g. 85 (measure at navel)", note:"If unknown, enter 0" },
+      { id:"weightTrend", text:"Weight trend in the past 12 months?", options:[["stable","Stable"],["gradual","Gradually increased"],["significant","Significantly increased"],["decreased","Decreased"]] },
+      { id:"fatStorage", text:"Where do you tend to carry excess weight?", options:[["abdomen","Abdomen"],["hips","Hips and thighs"],["even","Evenly distributed"],["na","Not applicable"]] },
+      { id:"weightDiff", text:"Difficulty losing weight in the past 5 years?", options:[["no","No difficulty"],["moderate","Moderate difficulty"],["significant","Significant difficulty"]] },
+    ],
+  },
+  {
+    title: "Glucose Stability",
+    subtitle: "How your body manages energy",
+    questions: [
+      { id:"energyAfterMeal", text:"Energy level 1–2 hours after meals?", options:[["stable","Stable energy"],["slight","Slight dip"],["noticeable","Noticeable crash"],["severe","Severe crash"]] },
+      { id:"cravings", text:"How often do you experience sugar or carb cravings?", options:[["rarely","Rarely"],["occasionally","Occasionally"],["frequently","Frequently"],["daily","Daily"]] },
+      { id:"delayedMeal", text:"What happens when you delay a meal?", options:[["mild","Mild hunger"],["irritable","Become irritable"],["shaky","Shaky or dizzy"],["avoid","I avoid delaying meals"]] },
+      { id:"trembling", text:"Trembling or sweating that resolves with eating?", options:[["never","Never"],["rarely","Rarely"],["occasionally","Occasionally"],["frequently","Frequently"]] },
+      { id:"diabetesHistory", text:"Have you ever been told you have:", options:[["none","None of these"],["prediabetes","Pre-diabetes"],["gestational","Gestational diabetes"],["type2","Type 2 diabetes"]] },
+    ],
+  },
+  {
+    title: "Liver Load Pattern",
+    subtitle: "Dietary burden on metabolic processing",
+    questions: [
+      { id:"sugaryDrinks", text:"How often do you consume sugary beverages?", options:[["rarely","Rarely or never"],["1to3","1–3 times per week"],["4to6","4–6 times per week"],["daily","Daily"]] },
+      { id:"processedFood", text:"Ultra-processed or fast food frequency?", options:[["rarely","Rarely"],["1to2","1–2 times per week"],["3to4","3–4 times per week"],["5plus","5 or more per week"]] },
+      { id:"addedSugar", text:"Added sugar in foods or drinks?", options:[["rarely","Rarely"],["1to3","1–3 times per week"],["4to6","4–6 times per week"],["daily","Daily"]] },
+      { id:"alcohol", text:"Alcohol consumption pattern?", options:[["none","None"],["moderate","Moderate (1–2 drinks, few times/week)"],["regular","Regular (most days)"],["high","High (daily, multiple)"]] },
+      { id:"overfull", text:"How often do you eat until uncomfortably full?", options:[["rarely","Rarely"],["occasionally","Occasionally"],["frequently","Frequently"],["most","Most days"]] },
+    ],
+  },
+  {
+    title: "Inflammation & Recovery",
+    subtitle: "Sleep, stress, and systemic recovery",
+    questions: [
+      { id:"sleepHours", text:"Average hours of sleep per night?", options:[["7to9","7–9 hours"],["6to7","6–7 hours"],["5to6","5–6 hours"],["under5","Under 5 hours"]] },
+      { id:"sleepConsistency", text:"How consistent is your sleep schedule?", options:[["very","Very consistent"],["moderate","Moderately consistent"],["somewhat","Somewhat inconsistent"],["highly","Highly inconsistent"]] },
+      { id:"wakeRested", text:"Do you wake up feeling rested?", options:[["most","Most days"],["sometimes","Sometimes"],["rarely","Rarely"],["never","Never"]] },
+      { id:"stress", text:"Stress level in the past month?", options:[["low","Low"],["moderate","Moderate"],["high","High"],["vhigh","Very high"]] },
+      { id:"brainFog", text:"Frequency of brain fog or poor concentration?", options:[["rarely","Rarely"],["occasionally","Occasionally"],["frequently","Frequently"],["daily","Daily"]] },
+    ],
+  },
+  {
+    title: "Activity Resilience",
+    subtitle: "Movement patterns and physical capacity",
+    questions: [
+      { id:"exerciseMin", text:"Structured exercise minutes per week?", options:[["150plus","150+ minutes"],["75to149","75–149 minutes"],["30to74","30–74 minutes"],["under30","Under 30 minutes"]] },
+      { id:"dailyMovement", text:"Daily movement level outside exercise?", options:[["highly","Highly active"],["moderate","Moderately active"],["mostly","Mostly sedentary"],["fully","Fully sedentary"]] },
+      { id:"resistance", text:"Resistance or strength training?", options:[["2plus","2+ times per week"],["1week","Once per week"],["occasional","Occasionally"],["never","Never"]] },
+      { id:"recovery", text:"Recovery after physical exertion?", options:[["quick","Quick recovery"],["moderate","Moderate recovery"],["slow","Slow or difficult"],["na","Not applicable"]] },
+    ],
+  },
+];
+
+const DIRECTIVES = {
+  glucose: [
+    { title:"Pair carbohydrates with protein and fiber at every meal", freq:"7 days", why:"Slows glucose absorption, preventing spikes that drive energy crashes and long-term insulin resistance." },
+    { title:"Walk 10 minutes after your largest meal", freq:"5 of 7 days", why:"Post-meal movement clears glucose from the bloodstream, reducing peak glucose by up to 30%." },
+    { title:"Replace one refined carbohydrate per day with a fiber-rich alternative", freq:"7 days", why:"Reduces glycemic load, stabilizing energy and reducing pancreatic strain over time." },
+  ],
+  inflammation: [
+    { title:"Establish a consistent bedtime within a 30-minute window", freq:"5 of 7 nights", why:"Sleep consistency reduces inflammatory markers more effectively than sleep duration alone." },
+    { title:"Include vegetables at two meals daily", freq:"14 servings this week", why:"Phytonutrients and antioxidants directly lower oxidative stress and systemic inflammation." },
+    { title:"Implement a 10-minute wind-down routine before sleep", freq:"5 of 7 nights", why:"Structured decompression lowers cortisol, the primary driver of chronic inflammation." },
+  ],
+  liver: [
+    { title:"Reduce ultra-processed food intake to twice this week or less", freq:"Maximum 2 servings", why:"Ultra-processed foods drive hepatic fat synthesis and liver enzyme elevation." },
+    { title:"Eliminate sugary beverages completely", freq:"7 days", why:"Fructose in liquid form bypasses satiety signals and directly stresses liver metabolism." },
+    { title:"Walk 20 minutes at moderate pace", freq:"4 of 7 days", why:"Aerobic movement supports hepatic fat oxidation and improves liver enzyme profiles." },
+  ],
+  bodyComp: [
+    { title:"Measure and record your waist circumference", freq:"Once this week", why:"Waist measurement is the single most actionable metabolic risk indicator, more predictive than weight." },
+    { title:"Add 2 servings of vegetables to your largest meal", freq:"7 days", why:"Increases satiety through volume and fiber, supporting sustainable composition change." },
+    { title:"Complete two 15-minute resistance sessions", freq:"2 sessions this week", why:"Resistance training builds metabolically active tissue that improves resting metabolic rate." },
+  ],
+  activity: [
+    { title:"Accumulate 8,000 steps daily", freq:"5 of 7 days", why:"Non-exercise activity thermogenesis is the largest modifiable component of daily energy expenditure." },
+    { title:"Complete one structured resistance training session", freq:"1 session this week", why:"Even minimal resistance work preserves muscle mass critical for metabolic function." },
+    { title:"Take a 5-minute movement break every 2 hours during work", freq:"3–5 breaks daily", why:"Breaking prolonged sitting restores insulin sensitivity and improves glucose clearance." },
+  ],
+};
+
+const PROTOCOLS = {
+  glucose: {
+    title:"Glucose Stabilization Protocol",
+    weeks:[
+      { week:1, goal:"Establish glucose-aware eating patterns", meals:["Pair every carbohydrate with protein or healthy fat","Eat protein within 60 minutes of waking","No isolated carbohydrate snacking"], actions:["10-min post-meal walk after largest meal","Log energy levels 1hr after each meal"], track:["Post-meal energy stability (1–5)","Daily carb-protein pairing adherence"] },
+      { week:2, goal:"Reduce glycemic variability", meals:["Replace refined grains with intact grains at 2 meals","Add leafy greens to lunch and dinner","Eat whole fruit instead of juice"], actions:["Extend post-meal walk to 15 minutes","Add vinegar before one meal daily"], track:["Cravings frequency (daily count)","Afternoon energy crash occurrence"] },
+      { week:3, goal:"Optimize meal timing and composition", meals:["Consolidate eating within 10–12 hour window","Largest meal at midday","Evening meal lighter, fiber-focused"], actions:["No food 3 hours before sleep","Add resistance movement 2x this week"], track:["Eating window adherence","Sleep quality self-rating"] },
+      { week:4, goal:"Consolidate and assess improvement", meals:["Maintain all Week 1–3 rules","Introduce one new vegetable daily","Legume-based meals 3x this week"], actions:["Re-take metabolic assessment","Document energy pattern changes"], track:["Overall energy stability trend","Waist measurement change"] },
+    ],
+  },
+  inflammation: {
+    title:"Inflammation Reset Protocol",
+    weeks:[
+      { week:1, goal:"Establish recovery foundations", meals:["Two servings of fatty fish this week","Colorful vegetables at every meal","Eliminate added sugar for 7 days"], actions:["Set consistent bedtime (±30 min)","10-min wind-down routine nightly"], track:["Sleep consistency (bedtime variance)","Brain fog episodes (daily count)"] },
+      { week:2, goal:"Deepen anti-inflammatory nutrition", meals:["30 different plant foods this week","Daily fermented food serving","Turmeric or ginger in one meal daily"], actions:["20 min gentle movement daily","5-min breathing exercise before bed"], track:["Plant food variety count","Joint stiffness rating (1–5)"] },
+      { week:3, goal:"Stress and cortisol management", meals:["Maintain anti-inflammatory patterns","Add magnesium-rich foods daily","Green tea replacing afternoon coffee"], actions:["Structured stress management 10 min daily","No screens 60 min before bed"], track:["Subjective stress rating","Sleep quality improvement"] },
+      { week:4, goal:"Consolidate and measure progress", meals:["Sustain all protocol patterns","Omega-3 rich meals 3x this week","Reduce omega-6 cooking oils"], actions:["Re-take metabolic assessment","Document recovery changes"], track:["Overall inflammation symptom trend","Energy and focus improvement"] },
+    ],
+  },
+  liver: {
+    title:"Liver Load Reduction Protocol",
+    weeks:[
+      { week:1, goal:"Reduce hepatic processing burden", meals:["Zero sugary beverages for 7 days","Maximum 2 ultra-processed meals","Cruciferous vegetables 4x this week"], actions:["20-min walk 4 days this week","Log all alcohol consumption"], track:["Sugary drink adherence","Processed food frequency"] },
+      { week:2, goal:"Support liver detoxification", meals:["Daily leafy greens","Eggs or legumes for choline 4x","Garlic and onion in cooking daily"], actions:["Walking 25 min, 5 days","Reduce alcohol 50% from baseline"], track:["Vegetable intake consistency","Bloating frequency"] },
+      { week:3, goal:"Optimize fat metabolism", meals:["Fatty fish 2x this week","Coffee daily for liver support","Fried food maximum 1x this week"], actions:["Add 1 resistance session","Increase water to 8 glasses daily"], track:["Abdominal comfort rating","Energy level improvement"] },
+      { week:4, goal:"Assess and consolidate", meals:["Maintain all protocol patterns","Fiber target: 30g daily","Minimal alcohol this week"], actions:["Re-take metabolic assessment","Note digestive changes"], track:["Overall digestive comfort","Waist measurement change"] },
+    ],
+  },
+  bodyComp: {
+    title:"Body Composition Protocol",
+    weeks:[
+      { week:1, goal:"Establish measurement baseline", meals:["Protein at every meal (palm-sized)","2 extra vegetable servings at largest meal","Reduce liquid calories by 50%"], actions:["Measure waist circumference","Two 15-min resistance sessions","7,000 daily step target"], track:["Waist measurement","Resistance session completion"] },
+      { week:2, goal:"Build metabolically active tissue", meals:["Protein 1.2g per kg bodyweight","Replace one starch with legumes daily","3 structured meals, no grazing"], actions:["Three 15-min resistance sessions","8,000 daily step target"], track:["Protein intake adherence","Step count average"] },
+      { week:3, goal:"Optimize body composition signals", meals:["Maintain protein targets","Healthy fats at each meal","10-hour eating window"], actions:["Two 20-min resistance sessions","One longer walk (30+ min)"], track:["Eating window adherence","Strength progression"] },
+      { week:4, goal:"Measure progress", meals:["Sustain all patterns","Increase vegetable diversity","Mindful eating at all meals"], actions:["Re-measure waist","Re-take assessment"], track:["Waist change","Composition trend"] },
+    ],
+  },
+  activity: {
+    title:"Activity Resilience Protocol",
+    weeks:[
+      { week:1, goal:"Establish movement baseline", meals:["Pre-activity: light protein + carb","Post-activity: protein within 45 min","Hydration: 8+ glasses daily"], actions:["8,000 steps daily for 5 days","One resistance session","Movement break every 2 hours"], track:["Daily step count","Seated time breaks"] },
+      { week:2, goal:"Build structured activity habit", meals:["Maintain activity nutrition","Anti-inflammatory foods on training days","7+ hours sleep on training nights"], actions:["Two resistance sessions","One 20-min moderate cardio","10,000 step target 3 days"], track:["Session completion rate","Recovery quality"] },
+      { week:3, goal:"Progress and recover", meals:["Protein timing around workouts","Tart cherry or beetroot for recovery","Magnesium-rich evening meals"], actions:["Two resistance + two cardio","Active recovery day (yoga/walking)"], track:["Performance progression","Recovery duration"] },
+      { week:4, goal:"Consolidate resilience", meals:["Sustain performance nutrition","Intuitive eating with activity support","Quality celebratory meal"], actions:["Maintain Week 3 level","Re-take assessment"], track:["Fitness improvement","Score change"] },
+    ],
+  },
+};
+
+// ── STATE ────────────────────────────────────────────────────
+let answers = {};
+let sectionIdx = 0;
+let results = null;
+let isPremium = false;
+let showProtocol = false;
+let protocolWeek = 0;
+
+// ── SCORING ENGINE ──────────────────────────────────────────
+function mc(val, map) { return map[val] ?? 50; }
+
+function computeScores() {
+  const a = answers;
+  const whr = (parseFloat(a.waist)||0) / (parseFloat(a.height)||170);
+  function whrS(r) { return r<0.5?95:r<0.55?78:r<0.6?60:40; }
+
+  const bodyComp = Math.round(
+    whrS(whr)*0.35 + mc(a.fatStorage,{abdomen:35,hips:65,even:55,na:85})*0.2 +
+    mc(a.weightDiff,{no:90,moderate:55,significant:30})*0.2 +
+    mc(a.weightTrend,{stable:90,gradual:60,significant:35,decreased:70})*0.15 +
+    mc(a.resistance,{"2plus":90,"1week":70,occasional:45,never:25})*0.1
+  );
+  const glucose = Math.round(
+    mc(a.energyAfterMeal,{stable:95,slight:70,noticeable:40,severe:15})*0.25 +
+    mc(a.cravings,{rarely:90,occasionally:65,frequently:35,daily:15})*0.2 +
+    mc(a.delayedMeal,{mild:90,irritable:60,shaky:30,avoid:15})*0.2 +
+    mc(a.trembling,{never:95,rarely:70,occasionally:40,frequently:15})*0.15 +
+    mc(a.diabetesHistory,{none:90,prediabetes:40,gestational:50,type2:20})*0.2
+  );
+  const liver = Math.round(
+    mc(a.sugaryDrinks,{rarely:90,"1to3":65,"4to6":35,daily:15})*0.25 +
+    mc(a.processedFood,{rarely:90,"1to2":65,"3to4":35,"5plus":15})*0.25 +
+    mc(a.addedSugar,{rarely:90,"1to3":65,"4to6":35,daily:15})*0.2 +
+    mc(a.alcohol,{none:90,moderate:70,regular:40,high:15})*0.15 +
+    mc(a.overfull,{rarely:90,occasionally:65,frequently:35,most:15})*0.15
+  );
+  const inflammation = Math.round(
+    mc(a.sleepHours,{"7to9":90,"6to7":65,"5to6":40,under5:15})*0.2 +
+    mc(a.sleepConsistency,{very:90,moderate:65,somewhat:40,highly:15})*0.15 +
+    mc(a.wakeRested,{most:90,sometimes:60,rarely:35,never:15})*0.2 +
+    mc(a.stress,{low:90,moderate:60,high:35,vhigh:15})*0.2 +
+    mc(a.brainFog,{rarely:90,occasionally:60,frequently:35,daily:15})*0.25
+  );
+  const activity = Math.round(
+    mc(a.exerciseMin,{"150plus":90,"75to149":70,"30to74":45,under30:20})*0.3 +
+    mc(a.dailyMovement,{highly:90,moderate:65,mostly:40,fully:15})*0.3 +
+    mc(a.resistance,{"2plus":90,"1week":70,occasional:45,never:20})*0.25 +
+    mc(a.recovery,{quick:90,moderate:65,slow:35,na:50})*0.15
+  );
+
+  const domains = [
+    {key:"bodyComp",label:"Body Composition",score:bodyComp,icon:"&#9673;"},
+    {key:"glucose",label:"Glucose Stability",score:glucose,icon:"&#9672;"},
+    {key:"liver",label:"Liver Load Pattern",score:liver,icon:"&#9670;"},
+    {key:"inflammation",label:"Inflammation & Recovery",score:inflammation,icon:"&#9671;"},
+    {key:"activity",label:"Activity Resilience",score:activity,icon:"&#9651;"},
+  ];
+  const overall = Math.round(domains.reduce((s,d)=>s+d.score,0)/5);
+
+  const order = ["glucose","inflammation","liver","bodyComp","activity"];
+  let pri = domains.reduce((p,d)=>d.score<p.score?d:p, domains[0]);
+  const auto45 = domains.filter(d=>d.score<45);
+  if(auto45.length) pri = auto45.sort((a,b)=>order.indexOf(a.key)-order.indexOf(b.key))[0];
+  else {
+    const low = Math.min(...domains.map(d=>d.score));
+    const ties = domains.filter(d=>d.score<=low+3);
+    if(ties.length>1) pri = ties.sort((a,b)=>order.indexOf(a.key)-order.indexOf(b.key))[0];
+  }
+
+  return {overall, domains, priority:pri};
+}
+
+function getBand(s) {
+  if(s>=80) return {label:"Stable",color:"var(--stable)",bg:"rgba(45,106,79,0.15)"};
+  if(s>=65) return {label:"Mild Instability",color:"var(--mild)",bg:"rgba(123,109,46,0.15)"};
+  if(s>=50) return {label:"Elevated Pattern",color:"var(--elevated)",bg:"rgba(180,83,9,0.15)"};
+  return {label:"Significant Instability",color:"var(--significant)",bg:"rgba(153,27,27,0.15)"};
+}
+
+// ── SCREEN MANAGEMENT ───────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('[id^="screen-"]').forEach(el=>el.classList.add('hidden'));
+  document.getElementById('screen-'+name).classList.remove('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  if(name==='assess') renderSection();
+  if(name==='results') renderResults();
+}
+
+// ── ASSESSMENT RENDERER ─────────────────────────────────────
+function renderSection() {
+  const sec = SECTIONS[sectionIdx];
+  const totalQ = SECTIONS.reduce((s,sec)=>s+sec.questions.length,0);
+  const answered = Object.keys(answers).length;
+
+  document.getElementById('answer-count').textContent = answered+' of '+totalQ+' answered';
+  document.getElementById('progress-fill').style.width = Math.max(5, ((sectionIdx+1)/SECTIONS.length)*100)+'%';
+  document.getElementById('section-count').textContent = 'Section '+(sectionIdx+1)+' of '+SECTIONS.length;
+  document.getElementById('section-name').textContent = sec.title;
+
+  document.getElementById('section-header').innerHTML =
+    '<h2 class="serif">'+sec.title+'</h2><p>'+sec.subtitle+'</p>';
+
+  let html = '';
+  sec.questions.forEach(q => {
+    html += '<div class="q-card"><label class="q-label">'+q.text+'</label>';
+    if(q.type==='number') {
+      html += '<input class="q-input" type="number" placeholder="'+(q.placeholder||'')+'" value="'+(answers[q.id]||'')+'" oninput="answers[\''+q.id+'\']=this.value;updateCount()">';
+      if(q.note) html += '<div class="q-note">'+q.note+'</div>';
+    } else {
+      html += '<div class="q-options">';
+      q.options.forEach(([val,label]) => {
+        const sel = answers[q.id]===val;
+        html += '<button class="q-opt'+(sel?' selected':'')+'" onclick="pickOpt(\''+q.id+'\',\''+val+'\',this)">'+
+          (sel?'&#9679; ':'&#9675; ')+label+'</button>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  document.getElementById('questions-container').innerHTML = html;
+
+  // Nav buttons
+  let nav = '';
+  if(sectionIdx>0) nav += '<button class="btn btn-outline" onclick="prevSection()">&larr; Previous</button>';
+  if(sectionIdx<SECTIONS.length-1) {
+    nav += '<button class="btn btn-primary" id="btn-next" onclick="nextSection()">Continue &rarr;</button>';
+  } else {
+    nav += '<button class="btn btn-primary" id="btn-submit" onclick="submitAssessment()" style="background:linear-gradient(135deg,var(--forest),var(--forest-dark))">Calculate My Score &rarr;</button>';
+  }
+  document.getElementById('assess-nav').innerHTML = nav;
+  checkSectionComplete();
+}
+
+function pickOpt(id, val, el) {
+  answers[id] = val;
+  el.parentElement.querySelectorAll('.q-opt').forEach(b => {
+    b.classList.remove('selected');
+    b.innerHTML = '&#9675; ' + b.textContent.substring(2);
+  });
+  el.classList.add('selected');
+  el.innerHTML = '&#9679; ' + el.textContent.substring(2);
+  updateCount();
+  checkSectionComplete();
+}
+
+function updateCount() {
+  const totalQ = SECTIONS.reduce((s,sec)=>s+sec.questions.length,0);
+  document.getElementById('answer-count').textContent = Object.keys(answers).length+' of '+totalQ+' answered';
+  checkSectionComplete();
+}
+
+function checkSectionComplete() {
+  const sec = SECTIONS[sectionIdx];
+  const done = sec.questions.every(q=>answers[q.id]!==undefined&&answers[q.id]!=='');
+  const btn = document.getElementById('btn-next') || document.getElementById('btn-submit');
+  if(btn) btn.disabled = !done;
+}
+
+function nextSection() { if(sectionIdx<SECTIONS.length-1){sectionIdx++;renderSection();window.scrollTo({top:0,behavior:'smooth'});} }
+function prevSection() { if(sectionIdx>0){sectionIdx--;renderSection();window.scrollTo({top:0,behavior:'smooth'});} }
+function assessBack() { if(sectionIdx>0) prevSection(); else showScreen('landing'); }
+
+function submitAssessment() {
+  results = computeScores();
+  showScreen('results');
+}
+
+// ── RESULTS RENDERER ────────────────────────────────────────
+function renderResults() {
+  if(!results) return;
+  const band = getBand(results.overall);
+  const pri = results.priority;
+  const dirs = DIRECTIVES[pri.key] || DIRECTIVES.glucose;
+  const proto = PROTOCOLS[pri.key] || PROTOCOLS.glucose;
+
+  let interp = '';
+  if(results.overall>=80) interp = 'Your metabolic profile shows strong stability across all domains. Maintain current patterns and re-assess in 30 days.';
+  else if(results.overall>=65) interp = 'Your profile indicates mild instability, driven primarily by '+pri.label.toLowerCase()+'. Targeted adjustments can restore balance within 4–8 weeks.';
+  else if(results.overall>=50) interp = 'Your profile reveals an elevated instability pattern centered on '+pri.label.toLowerCase()+'. Structured intervention is recommended.';
+  else interp = 'Your profile shows significant metabolic instability, particularly in '+pri.label.toLowerCase()+'. Immediate protocol adherence is strongly advised.';
+
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  let h = '';
+
+  // Header
+  h += '<div class="results-header fade-in">';
+  h += '<div><div class="results-date">Metabolic Stability Assessment</div><div class="results-date">'+today+'</div></div>';
+  h += '<button class="btn btn-outline btn-sm" onclick="resetAll()">New Assessment</button>';
+  h += '</div>';
+
+  // Score card
+  h += '<div class="score-card fade-d1">';
+  h += '<div class="glow" style="background:'+band.color+'"></div>';
+  h += '<div class="score-label">Overall Metabolic Stability</div>';
+  h += '<div class="score-number serif" style="color:'+band.color+'">'+results.overall+'</div>';
+  h += '<div class="score-badge" style="background:'+band.bg+';border:1px solid '+band.color+'40;color:'+band.color+'">'+band.label+'</div>';
+  h += '<p class="score-interp">'+interp+'</p>';
+  h += '</div>';
+
+  // Domain bars
+  h += '<div class="domains-panel fade-d2"><h3 class="serif">Domain Breakdown</h3>';
+  results.domains.forEach((d,i) => {
+    const db = getBand(d.score);
+    const ip = d.key===pri.key;
+    h += '<div class="domain-row"><div class="domain-meta">';
+    h += '<div class="domain-name-wrap"><span class="domain-name-icon" style="color:'+(ip?'var(--sage)':'var(--text-muted)')+'">'+d.icon+'</span>';
+    h += '<span class="domain-name" style="font-weight:'+(ip?600:400)+';color:'+(ip?'var(--text)':'var(--text-mid)')+'">'+d.label+'</span>';
+    if(ip) h += '<span class="domain-pri-tag">Priority</span>';
+    h += '</div><span class="domain-score" style="color:'+db.color+'">'+d.score+'</span></div>';
+    h += '<div class="bar-track"><div class="bar-fill" style="width:'+d.score+'%;background:linear-gradient(90deg,'+db.color+'CC,'+db.color+');animation-delay:'+(0.3+i*0.12)+'s"></div></div></div>';
+  });
+  h += '</div>';
+
+  // Priority card
+  h += '<div class="priority-card fade-d3"><div class="priority-top">';
+  h += '<div class="priority-icon">'+pri.icon+'</div><div>';
+  h += '<div class="priority-label">Priority Focus Area</div>';
+  h += '<div class="priority-name serif">'+pri.label+'</div></div></div>';
+  h += '<p class="priority-desc">This domain scored '+pri.score+'/100, indicating the area with greatest opportunity for metabolic improvement. The directives below target this domain specifically.</p>';
+  h += '</div>';
+
+  // Directives
+  h += '<div class="dir-section fade-d4"><h3 class="serif">Your Personalized Directives</h3>';
+  dirs.forEach((d,i) => {
+    const locked = !isPremium && i>0;
+    h += '<div class="dir-card">';
+    if(locked) h += '<div class="dir-locked"><div class="dir-locked-icon">&#128274;</div><div class="dir-locked-text">Premium directive</div></div>';
+    h += '<div class="dir-top"><div class="dir-num">Directive '+(i+1)+'</div><div class="dir-freq">'+d.freq+'</div></div>';
+    h += '<div class="dir-title">'+d.title+'</div>';
+    h += '<p class="dir-why"><b>Why: </b>'+d.why+'</p></div>';
+  });
+  h += '</div>';
+
+  // Upgrade or Protocol
+  if(!isPremium) {
+    h += '<div class="upgrade-box fade-d5"><h3 class="serif">Unlock Full Metabolic Intelligence</h3>';
+    h += '<p>Get all 3 directives, structured 4-week protocols, weekly tracking, and executive summary export.</p>';
+    h += '<div class="upgrade-btns"><button class="btn btn-primary" onclick="unlock()">Upgrade — $29/month</button>';
+    h += '<button class="btn btn-outline" onclick="resetAll()">Maybe later</button></div></div>';
+  } else {
+    h += '<div id="proto-area" class="fade-d5">';
+    if(!showProtocol) {
+      h += '<button class="btn btn-primary" style="width:100%;margin-bottom:28px;" onclick="startProtocol()">Start 4-Week Protocol: '+proto.title+' &rarr;</button>';
+    } else {
+      h += renderProtocol(proto);
+    }
+    h += '</div>';
+  }
+
+  // Disclaimer
+  h += '<div class="disclaimer">This assessment provides lifestyle-based metabolic stability insights. It does not diagnose or treat medical conditions. Consult your healthcare provider for medical concerns.</div>';
+
+  document.getElementById('results-container').innerHTML = h;
+}
+
+function renderProtocol(proto) {
+  const w = proto.weeks[protocolWeek];
+  let h = '<div class="proto-panel">';
+  h += '<div class="proto-head"><div><div class="proto-tag">Active Protocol</div>';
+  h += '<div class="proto-title serif">'+proto.title+'</div></div>';
+  h += '<button class="btn btn-outline btn-sm" onclick="closeProtocol()">Close</button></div>';
+
+  h += '<div class="proto-tabs">';
+  proto.weeks.forEach((_,i) => {
+    h += '<button class="proto-tab'+(protocolWeek===i?' active':'')+'" onclick="switchWeek('+i+')">Week '+(i+1)+'</button>';
+  });
+  h += '</div>';
+
+  h += '<div class="proto-content">';
+  h += '<div class="proto-goal-label">Week '+w.week+' Goal</div>';
+  h += '<div class="proto-goal">'+w.goal+'</div>';
+
+  h += '<div class="proto-section"><div class="proto-section-title">Meal Rules</div>';
+  w.meals.forEach(m => h+='<div class="proto-item"><span class="dash">&mdash;</span><span>'+m+'</span></div>');
+  h += '</div>';
+
+  h += '<div class="proto-section"><div class="proto-section-title">Daily Actions</div>';
+  w.actions.forEach(a => h+='<div class="proto-item"><span class="dash">&mdash;</span><span>'+a+'</span></div>');
+  h += '</div>';
+
+  h += '<div class="proto-section"><div class="proto-section-title">Track This Week</div>';
+  w.track.forEach(t => h+='<div class="proto-item"><span class="check">&#9633;</span><span>'+t+'</span></div>');
+  h += '</div>';
+
+  h += '</div></div>';
+  return h;
+}
+
+function unlock() { isPremium = true; renderResults(); }
+function startProtocol() { showProtocol = true; protocolWeek = 0; renderResults(); }
+function closeProtocol() { showProtocol = false; renderResults(); }
+function switchWeek(i) { protocolWeek = i; renderResults(); }
+
+function resetAll() {
+  answers = {}; sectionIdx = 0; results = null;
+  isPremium = false; showProtocol = false; protocolWeek = 0;
+  showScreen('landing');
+}
+</script>
+</body>
+</html>
